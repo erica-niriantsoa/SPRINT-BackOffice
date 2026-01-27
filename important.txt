@@ -1,0 +1,6 @@
+mvn install:install-file \
+  -Dfile=mh-framework.jar \
+  -DgroupId=com.mhframework \
+  -DartifactId=mhframework \
+  -Dversion=1.0.0 \
+  -Dpackaging=jar
