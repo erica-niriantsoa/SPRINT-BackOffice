@@ -22,5 +22,9 @@ public class StagingController {
      @GetMapping("/sterica")
     public String stagingRix() {
         return "Staging Faharoa";
+      
+    @GetMapping("/st5")
+    public String stagingFahadimy() {
+        return "Staging Fahadimy";
     }
 }
