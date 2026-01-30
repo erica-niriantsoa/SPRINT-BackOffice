@@ -18,4 +18,9 @@ public class StagingController {
     public String stagingFaharoa() {
         return "Staging Faharoa";
     }
+
+     @GetMapping("/sterica")
+    public String stagingRix() {
+        return "Staging Faharoa";
+    }
 }
