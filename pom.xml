@@ -105,7 +105,7 @@
                             <target>
                                 <copy
                                     file="${project.build.directory}/${project.build.finalName}.war"
-                                    todir="/home/mihary/Documents/Server/apache-tomcat-10.1.49/webapps"
+                                    todir="C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps"
                                     overwrite="true" />
                             </target>
                         </configuration>
