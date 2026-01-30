@@ -13,4 +13,9 @@ public class StagingController {
         ModelView modelView = new ModelView("staging.jsp");
         return modelView;
     }
+
+    @GetMapping("/st2")
+    public String stagingFaharoa() {
+        return "Staging Faharoa";
+    }
 }
