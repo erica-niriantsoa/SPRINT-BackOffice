@@ -18,4 +18,8 @@ public class StagingController {
     public String stagingFaharoa() {
         return "Staging Faharoa";
     }
+     @GetMapping("/st6")
+    public String stagingFahenina() {
+        return "Staging Fahenina";
+    }
 }
