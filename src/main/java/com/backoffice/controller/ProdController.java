@@ -11,4 +11,9 @@ public class ProdController {
     public ModelView prod() {
         return new ModelView("prod.jsp");
     }
+
+    @GetMapping("/prod-2")
+    public String prod2() {
+        return "Product test 2";
+    }
 }
