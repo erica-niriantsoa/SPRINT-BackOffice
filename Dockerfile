@@ -1,22 +1,28 @@
-# Base image avec Java 17
-FROM eclipse-temurin:17-jdk
+# Build stage
+FROM maven:3.9-eclipse-temurin-17 AS build
 
-# Variables Tomcat
-ENV CATALINA_HOME /usr/local/tomcat
-ENV PATH $CATALINA_HOME/bin:$PATH
-ENV TOMCAT_VERSION 10.1.28
+WORKDIR /app
 
-# Installer Tomcat
-RUN apt-get update && apt-get install -y wget unzip && \
-    wget https://downloads.apache.org/tomcat/tomcat-10/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
-    tar xzf apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
-    mv apache-tomcat-${TOMCAT_VERSION} $CATALINA_HOME && \
-    rm apache-tomcat-${TOMCAT_VERSION}.tar.gz
+# Copier le pom.xml et télécharger les dépendances
+COPY pom.xml .
+COPY lib/ lib/
 
-# Copier le WAR dans Tomcat
-COPY target/SPRINT-BackOffice.war $CATALINA_HOME/webapps/
+# Copier le code source
+COPY src/ src/
 
-# Exposer le port 8080
+# Build l'application
+RUN mvn clean package -DskipTests
+
+# Runtime stage avec Tomcat
+FROM tomcat:10.1-jre17
+
+# Supprimer les applications par défaut de Tomcat
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+# Copier le WAR buildé
+COPY --from=build /app/target/SPRINT-BackOffice.war /usr/local/tomcat/webapps/ROOT.war
+
+# Exposer le port
 EXPOSE 8080
 
 # Démarrer Tomcat
