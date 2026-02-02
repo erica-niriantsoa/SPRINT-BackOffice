@@ -11,7 +11,7 @@
            http://www.springframework.org/schema/data/jpa https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <!-- Enable component scanning and auto-configuration -->
-    <context:component-scan base-package="config,controller,service,repository" />
+    <context:component-scan base-package="config,com.backoffice.controller,service,repository" />
     <context:annotation-config/>
 
     <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
