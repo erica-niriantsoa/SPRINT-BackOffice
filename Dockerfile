@@ -3,9 +3,17 @@ FROM maven:3.9-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-# Copier le pom.xml et télécharger les dépendances
+# Copier le pom.xml et les libs
 COPY pom.xml .
 COPY lib/ lib/
+
+# Installer le framework local dans Maven
+RUN mvn install:install-file \
+    -Dfile=lib/mh-framework.jar \
+    -DgroupId=com.mhframework \
+    -DartifactId=mhframework \
+    -Dversion=1.0.0 \
+    -Dpackaging=jar
 
 # Copier le code source
 COPY src/ src/

@@ -34,6 +34,14 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Framework local -->
+        <dependency>
+            <groupId>com.mhframework</groupId>
+            <artifactId>mhframework</artifactId>
+            <version>1.0.0</version>
+            <!-- SUPPRIMEZ scope et systemPath -->
+        </dependency>
+
         <!-- JSTL -->
         <dependency>
             <groupId>jakarta.servlet.jsp.jstl</groupId>
