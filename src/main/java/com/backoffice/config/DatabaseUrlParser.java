@@ -13,17 +13,31 @@ public class DatabaseUrlParser {
         }
         
         try {
-            // Remplacer postgresql:// par jdbc:postgresql://
-            if (databaseUrl.startsWith("postgresql://")) {
-                databaseUrl = "jdbc:" + databaseUrl;
+            // Parser l'URL PostgreSQL de Render
+            // Format: postgresql://user:password@host/database
+            URI uri = new URI(databaseUrl);
+            
+            String host = uri.getHost();
+            int port = uri.getPort() != -1 ? uri.getPort() : 5432;
+            String database = uri.getPath().substring(1); // Enlever le / initial
+            String userInfo = uri.getUserInfo();
+            
+            String username = "";
+            String password = "";
+            
+            if (userInfo != null && userInfo.contains(":")) {
+                String[] parts = userInfo.split(":", 2);
+                username = parts[0];
+                password = parts[1];
             }
             
-            // Ajouter sslmode=require pour Render
-            if (!databaseUrl.contains("sslmode=")) {
-                databaseUrl += "?sslmode=require";
-            }
+            // Construire l'URL JDBC avec hostname complet
+            String jdbcUrl = String.format(
+                "jdbc:postgresql://%s.render.com:%d/%s?user=%s&password=%s&sslmode=require",
+                host, port, database, username, password
+            );
             
-            return databaseUrl;
+            return jdbcUrl;
                     
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse DATABASE_URL: " + e.getMessage(), e);
