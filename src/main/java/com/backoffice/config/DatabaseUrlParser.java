@@ -31,9 +31,9 @@ public class DatabaseUrlParser {
                 password = parts[1];
             }
             
-            // Construire l'URL JDBC avec hostname complet
+            // Construire l'URL JDBC (utiliser le hostname tel quel, sans .render.com)
             String jdbcUrl = String.format(
-                "jdbc:postgresql://%s.render.com:%d/%s?user=%s&password=%s&sslmode=require",
+                "jdbc:postgresql://%s:%d/%s?user=%s&password=%s&sslmode=require",
                 host, port, database, username, password
             );
             
