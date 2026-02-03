@@ -27,6 +27,9 @@ FROM tomcat:10.1-jre17
 # Supprimer les applications par défaut de Tomcat
 RUN rm -rf /usr/local/tomcat/webapps/*
 
+# Désactiver le port de shutdown pour éviter les warnings avec les health checks
+RUN sed -i 's/<Server port="8005" shutdown="SHUTDOWN">/<Server port="-1" shutdown="SHUTDOWN">/' /usr/local/tomcat/conf/server.xml
+
 # Copier le WAR buildé
 COPY --from=build /app/target/SPRINT-BackOffice.war /usr/local/tomcat/webapps/ROOT.war
 
