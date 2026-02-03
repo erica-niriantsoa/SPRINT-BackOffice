@@ -22,6 +22,8 @@
             <groupId>com.mhframework</groupId>
             <artifactId>mhframework</artifactId>
             <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/mh-framework.jar</systemPath>
         </dependency>
 
         <!-- Jakarta EE 10 / Servlet 6 -->
