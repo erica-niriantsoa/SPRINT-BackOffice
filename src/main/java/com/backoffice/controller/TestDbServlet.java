@@ -38,6 +38,9 @@ public class TestDbServlet extends HttpServlet {
         out.println("<h1>Test de connexion PostgreSQL</h1>");
         
         try {
+            // Charger explicitement le driver PostgreSQL
+            Class.forName("org.postgresql.Driver");
+            
             String databaseUrl = DatabaseUrlParser.getJdbcUrl();
             
             out.println("<p><strong>URL de connexion :</strong> " + databaseUrl.replaceAll(":[^:@]+@", ":****@") + "</p>");
