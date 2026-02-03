@@ -1,6 +1,6 @@
 package com.backoffice.controller;
 
-import config.DatabaseUrlParser;
+import com.backoffice.config.DatabaseUrlParser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -26,22 +26,26 @@ public class TestDbServlet extends HttpServlet {
         
         out.println("<!DOCTYPE html>");
         out.println("<html>");
-        out.println("<head><title>Test Database</title></head>");
+        out.println("<head>");
+        out.println("<title>Test Database</title>");
+        out.println("<style>");
+        out.println("body { font-family: Arial; max-width: 800px; margin: 50px auto; padding: 20px; }");
+        out.println(".success { color: green; font-weight: bold; }");
+        out.println(".error { color: red; }");
+        out.println("</style>");
+        out.println("</head>");
         out.println("<body>");
         out.println("<h1>Test de connexion PostgreSQL</h1>");
         
         try {
-            // ✅ Utilise DatabaseUrlParser
             String databaseUrl = DatabaseUrlParser.getJdbcUrl();
             
             out.println("<p><strong>URL de connexion :</strong> " + databaseUrl.replaceAll(":[^:@]+@", ":****@") + "</p>");
             
-            // Tester la connexion
             Connection conn = DriverManager.getConnection(databaseUrl);
             
-            out.println("<p style='color: green; font-weight: bold;'>✅ Connexion réussie !</p>");
+            out.println("<p class='success'> Connexion réussie !</p>");
             
-            // Tester une requête
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT version(), current_database(), current_user");
             
@@ -59,7 +63,7 @@ public class TestDbServlet extends HttpServlet {
             conn.close();
             
         } catch (Exception e) {
-            out.println("<p style='color: red;'>❌ Erreur de connexion !</p>");
+            out.println("<p class='error'>❌ Erreur de connexion !</p>");
             out.println("<pre>" + e.getMessage() + "</pre>");
             e.printStackTrace(out);
         }

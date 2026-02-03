@@ -11,7 +11,7 @@
            http://www.springframework.org/schema/data/jpa https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <!-- Enable component scanning and auto-configuration -->
-    <context:component-scan base-package="config,com.backoffice.controller,service,repository" />
+    <context:component-scan base-package="com.backoffice" />
     <context:annotation-config/>
 
     <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
@@ -21,11 +21,11 @@
      <!-- Définition de la source de données PostgreSQL -->
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="org.postgresql.Driver" />
-        <!-- Utilise DATABASE_URL si disponible, sinon localhost -->
-        <property name="url" value="#{T(config.DatabaseUrlParser).getJdbcUrl()}" />
+        <!-- Utilise DatabaseUrlParser pour convertir l'URL Render -->
+        <property name="url" value="#{T(com.backoffice.config.DatabaseUrlParser).getJdbcUrl()}" />
         
         <!-- Configuration du pool de connexions -->
-        <property name="initialSize" value="5" />
+        <property name="initialSize" value="2" />
         <property name="maxTotal" value="10" />
         <property name="maxIdle" value="5" />
         <property name="minIdle" value="2" />
@@ -34,7 +34,7 @@
      <!-- Entity Manager Factory avec Hibernate -->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="entity" />
+        <property name="packagesToScan" value="com.backoffice.entity" />
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
         </property>
@@ -42,11 +42,8 @@
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.show_sql">#{systemEnvironment['HIBERNATE_SHOW_SQL'] ?: 'true'}</prop>
+                <prop key="hibernate.show_sql">false</prop>
                 <prop key="hibernate.format_sql">true</prop>
-                <!-- SSL pour Render PostgreSQL -->
-                <prop key="hibernate.connection.ssl">true</prop>
-                <prop key="hibernate.connection.sslmode">require</prop>
             </props>
         </property>
     </bean>
@@ -59,6 +56,50 @@
     <!-- Activation de l'annotation @Transactional -->
     <tx:annotation-driven transaction-manager="transactionManager" />
 
-    <!-- Activer Spring Data JPA si tu veux utiliser des interfaces extends JpaRepository -->
-    <jpa:repositories base-package="config,controller,service,repository" />
+    <!-- Activer Spring Data JPA -->
+    <jpa:repositories base-package="com.backoffice.repository" />
 </beans>
+```
+
+## Changements effectués :
+
+1. ✅ `base-package="com.backoffice"` - Scan tous les sous-packages
+2. ✅ `T(com.backoffice.config.DatabaseUrlParser)` - Chemin complet
+3. ✅ `packagesToScan="com.backoffice.entity"` - Pour les entités JPA
+4. ✅ `jpa:repositories base-package="com.backoffice.repository"` - Pour les repositories
+
+---
+
+## ✅ Configuration Render - C'est BON !
+
+Votre variable d'environnement sur Render est **correcte** :
+```
+DATABASE_URL = postgresql://sprint_user1:US8l9xVpuJQ7XvadIkNAHpLctma3YAyF@dpg-d5ugoha4d50c73d65tv0-a/sprint_db1
+```
+
+⚠️ **Mais vérifiez qu'il manque le domaine complet !** L'URL devrait être :
+```
+DATABASE_URL = postgresql://sprint_user1:US8l9xVpuJQ7XvadIkNAHpLctma3YAyF@dpg-d5ugoha4d50c73d65tv0-a.oregon-postgres.render.com/sprint_db1
+```
+
+Copiez l'**Internal Database URL** exacte depuis votre PostgreSQL Dashboard → **Connections**.
+
+---
+
+## Structure finale requise :
+```
+src/main/
+├── java/
+│   └── com/
+│       └── backoffice/
+│           ├── config/
+│           │   └── DatabaseUrlParser.java
+│           ├── controller/
+│           │   └── TestDbServlet.java
+│           ├── service/
+│           ├── repository/
+│           └── entity/
+├── resources/
+│   └── app-context.xml (le fichier corrigé ci-dessus)
+└── webapp/
+    └── index.html
