@@ -1,4 +1,4 @@
-package config;
+package com.backoffice.config;
 
 import java.net.URI;
 
