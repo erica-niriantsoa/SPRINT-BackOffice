@@ -4,21 +4,21 @@ TL : Erica (3124)
 Dev : Mihary (3353), Andie (3120)
 
     [ ] Backoffice 
-        [ ] : Script d'insertion de la table hotel #Base (Andie)
-        [ ] : Formulaire reservation  (Andie)
+        [ ] : Script d'insertion de la table hotel #Base (Mihary)
+        [ ] : Formulaire reservation  (Mihary)
             [ ] : Page
                 [ ] : reservationformulaire.jsp
             [ ] : Fonction
                 [ ] : void save(Reservation res), Class : Reservation
             [ ] : Integration
                 [ ] : appelle a la fonction save pour enregistrer la reservation
-        [ ] : Filtre reservation (Andie)
+        [ ] : Filtre reservation (Mihary)
             [ ] : Fonction
                 [ ] : List<Reservation> filtrerReservation(Date date)
 
 
     [ ] : FrontOffice
-        [ ] : Liste reservation  + Filtre recherche date (Mihary)
+        [ ] : Liste reservation  + Filtre recherche date (Andie)
             [ ] : Page 
                 [ ] : reservationlist.jsp
             [ ] : Fonction
