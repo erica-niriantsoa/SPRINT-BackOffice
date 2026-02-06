@@ -22,7 +22,10 @@
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="org.postgresql.Driver" />
         <!-- Utilise DatabaseUrlParser pour convertir l'URL Render -->
-        <property name="url" value="#{T(com.backoffice.config.DatabaseUrlParser).getJdbcUrl()}" />
+        <property name="url" value="${db.url}" />
+        
+        <property name="username" value="${db.user}" />
+        <property name="password" value="${db.password}" />
         
         <!-- Configuration du pool de connexions -->
         <property name="initialSize" value="2" />

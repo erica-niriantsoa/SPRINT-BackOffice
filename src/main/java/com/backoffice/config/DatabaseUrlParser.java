@@ -1,46 +1,26 @@
 package com.backoffice.config;
 
 import java.net.URI;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 public class DatabaseUrlParser {
     
+    private static final String PROPERTIES_FILE = "src/main/webapp/WEB-INF/conf/mh.properties";
+
+    private static Properties loadProperties() {
+        Properties properties = new Properties();
+        try (FileInputStream fis = new FileInputStream(PROPERTIES_FILE)) {
+            properties.load(fis);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load properties file: " + PROPERTIES_FILE, e);
+        }
+        return properties;
+    }
+    
     public static String getJdbcUrl() {
-        String databaseUrl = System.getenv("DATABASE_URL");
-        
-        // Si pas de DATABASE_URL, utiliser la config locale
-        if (databaseUrl == null || databaseUrl.isEmpty()) {
-            return "jdbc:postgresql://localhost:5432/test_framework";
-        }
-        
-        try {
-            // Parser l'URL PostgreSQL de Render
-            // Format: postgresql://user:password@host/database
-            URI uri = new URI(databaseUrl);
-            
-            String host = uri.getHost();
-            int port = uri.getPort() != -1 ? uri.getPort() : 5432;
-            String database = uri.getPath().substring(1); // Enlever le / initial
-            String userInfo = uri.getUserInfo();
-            
-            String username = "";
-            String password = "";
-            
-            if (userInfo != null && userInfo.contains(":")) {
-                String[] parts = userInfo.split(":", 2);
-                username = parts[0];
-                password = parts[1];
-            }
-            
-            // Construire l'URL JDBC (utiliser le hostname tel quel, sans .render.com)
-            String jdbcUrl = String.format(
-                "jdbc:postgresql://%s:%d/%s?user=%s&password=%s&sslmode=require",
-                host, port, database, username, password
-            );
-            
-            return jdbcUrl;
-                    
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to parse DATABASE_URL: " + e.getMessage(), e);
-        }
+        Properties properties = loadProperties();
+        return properties.getProperty("db.url");
     }
 }
