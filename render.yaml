@@ -4,7 +4,9 @@ services:
     env: docker
     dockerfilePath: ./Dockerfile
     plan: starter
-    healthCheckPath: /
+    healthCheckPath: /index.html
     envVars:
       - key: PORT
         value: 8080
+      - key: DATABASE_URL
+        value: postgresql://sprint_user1:US8l9xVpuJQ7XvadIkNAHpLctma3YAyF@dpg-d5ugoha4d50c73d65tv0-a.oregon-postgres.render.com:5432/sprint_db1
