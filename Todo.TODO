@@ -1,0 +1,25 @@
+[ ] Sprint 1
+
+TL : Erica (3124)
+Dev : Mihary (3353), Andie (3120)
+
+    [ ] Backoffice 
+        [ ] : Script d'insertion de la table hotel #Base (Andie)
+        [ ] : Formulaire reservation  (Andie)
+            [ ] : Page
+                [ ] : reservationformulaire.jsp
+            [ ] : Fonction
+                [ ] : void save(Reservation res), Class : Reservation
+            [ ] : Integration
+                [ ] : appelle a la fonction save pour enregistrer la reservation
+        [ ] : Filtre reservation (Andie)
+            [ ] : Fonction
+                [ ] : List<Reservation> filtrerReservation(Date date)
+
+
+    [ ] : FrontOffice
+        [ ] : Liste reservation  + Filtre recherche date (Mihary)
+            [ ] : Page 
+                [ ] : reservationlist.jsp
+            [ ] : Fonction
+                [ ] : appelle api dans le Backend
