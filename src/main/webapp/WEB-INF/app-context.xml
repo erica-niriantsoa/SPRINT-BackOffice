@@ -11,33 +11,30 @@
            http://www.springframework.org/schema/data/jpa https://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <!-- Enable component scanning and auto-configuration -->
-    <context:component-scan base-package="com.backoffice" />
+    <context:component-scan base-package="config,controller,service,repository" />
     <context:annotation-config/>
 
+    <!-- Charger les propriétés depuis mh.properties -->
     <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
-        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:WEB-INF/conf/mh.properties</value>
+            </list>
+        </property>
     </bean>
 
-     <!-- Définition de la source de données PostgreSQL -->
-    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+    <!-- Définition de la source de données PostgreSQL -->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
         <property name="driverClassName" value="org.postgresql.Driver" />
-        <!-- Utilise DatabaseUrlParser pour convertir l'URL Render -->
         <property name="url" value="${db.url}" />
-        
         <property name="username" value="${db.user}" />
         <property name="password" value="${db.password}" />
-        
-        <!-- Configuration du pool de connexions -->
-        <property name="initialSize" value="2" />
-        <property name="maxTotal" value="10" />
-        <property name="maxIdle" value="5" />
-        <property name="minIdle" value="2" />
     </bean>
 
-     <!-- Entity Manager Factory avec Hibernate -->
+    <!-- Entity Manager Factory avec Hibernate -->
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="com.backoffice.entity" />
+        <property name="packagesToScan" value="entity" />
         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
         </property>
@@ -45,13 +42,13 @@
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.format_sql">true</prop>
             </props>
         </property>
     </bean>
 
-     <!-- Gestionnaire de transactions -->
+    <!-- Gestionnaire de transactions -->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
@@ -59,6 +56,6 @@
     <!-- Activation de l'annotation @Transactional -->
     <tx:annotation-driven transaction-manager="transactionManager" />
 
-    <!-- Activer Spring Data JPA -->
-    <jpa:repositories base-package="com.backoffice.repository" />
+    <!-- Activer Spring Data JPA si tu veux utiliser des interfaces extends JpaRepository -->
+    <jpa:repositories base-package="config,controller,service,repository" />
 </beans>
